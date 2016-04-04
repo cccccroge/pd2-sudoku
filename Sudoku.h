@@ -23,7 +23,7 @@ class Sudoku {
 	private:
 
 	vector<int> board,temp;
-	int result1[10][10],result2[10][10],result3[10][10],result4[10][10],result5[10][10];
+	int newBoard[10][10], result[10][10], temp1[10][10];
 	int num;
 	int unavail[82];
 
