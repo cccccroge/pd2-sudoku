@@ -22,8 +22,7 @@ class Sudoku {
 
 	private:
 
-	vector<int> board,temp;
-	int newBoard[10][10], result[10][10], temp1[10][10];
+	vector<int> board,temp,temp1,temp2;
 	int num;
 	int unavail[82];
 

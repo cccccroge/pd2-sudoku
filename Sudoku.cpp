@@ -6,15 +6,15 @@ using namespace std;
 
 	void Sudoku::giveQuestion(){
 
-		cout << "0 8 0 0 0 0 5 9 0" << endl;
-		cout << "9 0 4 0 0 0 7 0 0" << endl;
-		cout << "0 0 6 5 0 4 0 0 0" << endl;
-		cout << "0 1 2 4 0 0 0 0 0" << endl;
-		cout << "0 0 3 0 0 0 0 6 8" << endl;
-		cout << "0 0 0 0 0 0 0 5 0" << endl;
-		cout << "0 0 0 6 0 5 0 0 0" << endl;
-		cout << "0 4 0 0 0 8 6 1 0" << endl;
-		cout << "0 4 0 1 0 7 0 0 0" << endl;
+		cout << "0 0 0 0 0 0 0 0 0" << endl;
+		cout << "0 0 0 0 0 0 0 0 0" << endl;
+		cout << "0 0 0 0 0 0 0 0 8" << endl;
+		cout << "0 0 0 0 0 0 0 0 0" << endl;
+		cout << "0 0 0 0 0 0 0 0 0" << endl;
+		cout << "0 0 0 0 0 0 8 0 0" << endl;
+		cout << "0 0 0 0 0 0 0 9 0" << endl;
+		cout << "0 0 0 0 0 8 0 0 0" << endl;
+		cout << "0 0 0 8 0 0 0 0 0" << endl;
 	}
 
 
@@ -48,183 +48,122 @@ using namespace std;
 
  	void Sudoku::changeNum(int a, int b){
 
-		int i, j;
+		int i;
+		temp1 = board;
+		temp2.clear();
+		temp2.reserve(82);
+		temp2.resize(82,0);
 
-		for(i = 1 ; i < 82 ; i++)				//新的數獨板（二維）
-		  newBoard[(i-1)/9+1][i-(i-1)/9*9] = temp[i];
+		for(i = 1 ; i < 82 ; i++){
 
-		for(i = 1 ; i < 10 ; i++)
-		for(j = 1 ; j < 10 ; j++)
-		  result[i][j] = newBoard[i][j];
-
-		for(i = 1 ; i < 10 ; i++)
-		for(j = 1 ; j < 10 ; j++){
-		  if(newBoard[i][j] == b) result[i][j] = a;			//數字交換
-		  if(newBoard[i][j] == a) result[i][j] = b;
-
+			if(temp1[i] == a)
+			  temp2[i] = b;
+			if(temp1[i] == b)
+			  temp2[i] = a;
+			if((temp1[i]!=a) && (temp1[i]!=b))
+			  temp2[i] = temp1[i];
 		}
 
-		
+		board = temp2;
 	}
 
  	void Sudoku::changeRow(int a, int b){
 		
-		int i, j;
+		if(a == b) return;
 
-		for(i = 1 ; i < 10 ; i++)
-		for(j = 1 ; j < 10 ; j++)
-		  temp1[i][j] = result[i][j];
+		temp1 = board;
 
+		int i;
+		if(a==0&&b==1 || a==1&&b==0){
 
-		if((a==0&&b==1)||(a==1&&b==0)){
-
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[i+3][j] = temp1[i][j];
-			    result[i][j] = temp1[i+3][j];
-			  }
-			for(i = 7 ; i < 10 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[i][j] = temp1[i][j];
+			for(i = 1 ; i <= 27 ; i++)
+			  board[i+27] = temp1[i];
+			for(i = 28 ; i <= 54 ; i++)
+			  board[i-27] = temp1[i];
 		}
 
-		if((a==0&&b==2)||(a==2&&b==0)){
+		if(a==0&&b==2 || a==2&&b==0){
 
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[i+6][j] = temp1[i][j];
-			    result[i][j] = temp1[i+6][j];
-			  }
-			for(i = 4 ; i < 7 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[i][j] = temp1[i][j];
+			for(i = 1 ; i <= 27 ; i++)
+			  board[i+54] = temp1[i];
+			for(i = 55 ; i <= 81 ; i++)
+			  board[i-54] = temp1[i];
 		}
 
-		if((a==1&&b==2)||(a==2&&b==1)){
+		if(a==1&&b==2 || a==2&&b==1){
 
-			for(i = 4 ; i < 7 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[i+3][j] = temp1[i][j];
-			    result[i][j] = temp1[i+3][j];
-			  }
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[i][j] = temp1[i][j];
-		}
-
-		if(a==b){
-
-			for(i = 1 ; i < 10 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[i][j] = temp1[i][j];
+			for(i = 28 ; i <= 54 ; i++)
+			  board[i+27] = temp1[i];
+			for(i = 55 ; i <= 81 ; i++)
+			  board[i-27] = temp1[i];
 		}
 
 	}
 
 	void Sudoku::changeCol(int a, int b){
 
-		
-		int i, j;
+		if(a == b) return;
 
-		for(i = 1 ; i < 10 ; i++)
-		for(j = 1 ; j < 10 ; j++)
-		  temp1[i][j] = result[i][j];
+		temp1 = board;
+		int i, j = 1;
+		if(a==0&&b==1 || a==1&&b==0){
 
-		if((a==0&&b==1)||(a==1&&b==0)){
+			for(i = 1 ; i <= 75 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i+3] = temp1[i];
+			for(i = 4 ; i <= 78 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i-3] = temp1[i];
+		}	
+		if(a==0&&b==2 || a==2&&b==0){
 
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[j][i+3] = temp1[j][i];
-			    result[j][i] = temp1[j][i+3];
-			  }
-			for(i = 7 ; i < 10 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[j][i] = temp1[j][i];
+			for(i = 1 ; i <= 75 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i+6] = temp1[i];
+			for(i = 7 ; i <= 81 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i-6] = temp1[i];
 		}
+		if(a==2&&b==1 || a==1&&b==2){
 
-		if((a==0&&b==2)||(a==2&&b==0)){
-
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[j][i+6] = temp1[j][i];
-			    result[j][i] = temp1[j][i+6];
-			  }
-			for(i = 4 ; i < 7 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[j][i] = temp1[j][i];
+			for(i = 4 ; i <= 78 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i+3] = temp1[i];
+			for(i = 7 ; i <= 81 ; j%3==0 ? i+=7 : i++, j++)
+			  board[i-3] = temp1[i];
 		}
-
-		if((a==1&&b==2)||(a==2&&b==1)){
-
-			for(i = 4 ; i < 7 ; i++)
-			  for(j = 1 ; j < 10 ; j++){
-			    result[j][i+3] = temp1[j][i];
-			    result[j][i] = temp1[j][i+3];
-			  }
-			for(i = 1 ; i < 4 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[j][i] = temp1[j][i];
-		}
-
-		if(a==b){
-
-			for(i = 1 ; i < 10 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    result[i][j] = temp1[i][j];
-		}
-
 
 	}
 
 	void Sudoku::rotate(int n){
-
-		int resultA[10][10], resultB[10][10], resultC[10][10];
 		
-		int i, j, k, t, c;
+		int i, j, k, l, m, r = n % 4;
 
-		int degree = n % 4;
+		if(r == 0) return;
+		for(i = 1 ; i <= r ; i++){
 
-
-		for(c = 0 ; c < degree + 1 ; c++){
-
-			for(i = 1; i < 10 ; i++)
-			  for(j = 1 ; j < 10 ; j++)
-			    temp1[i][j] = result[i][j];
-
-			for(i = 1, k = 10, t = 0; i < 10; i++){
-			  k--, t++;
-			  for(j = 1, n = 1; j < 10 ; j++){
-			    result[n][k] = temp1[t][j];
-			    n++;
-			  }
-			}
+			temp1 = board;
+			for(j = 0, k = 0 ; j <= 72 ; j+=9, k--)
+			 for(l = 1, m = 9 ; l <= 9 ; l++, m+=9)
+			   board[m+k] = temp1[l+j];
 		}
 
 	}
 
 	void Sudoku::flip(int n){
 
-		
-		int i, j;
+		temp1 = board;
+		int i, j, k, l;
 
-
-		for(i = 1 ; i < 10 ; i++)
-		for(j = 1 ; j < 10 ; j++)
-		  temp1[i][j] = result[i][j];
-
-		if(n == 1)						//水平翻轉
-		for(i = 1 ; i < 10 ; i++)
-		  for(j = 1 ; j < 10 ; j++)
-		    result[i][10-j] = temp1[i][j];
-		if(n == 0)						//垂直翻轉
-		for(i = 1 ; i < 10 ; i++)
-		  for(j = 1 ; j < 10 ; j++)
-		    result[10-i][j] = temp1[i][j];
-
-
+		if(n == 0)
+		for(k = 0, l = 0 ; k <= 27 ; k+=9, l-=9)
+		 for(i = 1, j = 73 ; i <= 9 ; i++, j++){
+		   board[j+l] = temp1[i+k];
+		   board[i+k] = temp1[j+l];}
+		if(n == 1)
+		for(k = 0, l = 0 ; k <= 3 ; k++, l--)
+		 for(i = 1, j = 9 ; i <= 73 ; i+=9, j+=9){
+		   board[j+l] = temp1[i+k];
+		   board[i+k] = temp1[j+l];}
   	}
 	
 	void Sudoku::transform(){
+
 		srand(time(NULL));
 
 		changeNum(rand() % 9 + 1, rand() % 9 +1);
@@ -233,10 +172,15 @@ using namespace std;
 		rotate(rand() % 101);
 		flip(rand() % 2);
 
-		int i, j;
-		for(i = 1 ; i < 10 ; i++)
-		  for(j = 1 ; j < 10 ; j++)
-		    j == 9 ? cout << result[i][j] << endl : cout << result[i][j] << " ";
+		//changeNum(1, 2);
+		//changeRow(0, 1);
+		//changeCol(0, 1);
+		//rotate(2);
+		//flip(1);
+
+		int i;
+		for(i = 1 ; i < 82 ; i++)
+		  i%9==0?cout << board[i]<<endl:cout<<board[i]<<" ";
 
 	}
 	void Sudoku::checkQuestion(){
@@ -247,7 +191,7 @@ using namespace std;
 		  else unavail[i] = 0;
 
 		if(c == 2) {cout << "0" << endl; exit(1);}
-		//if(c == 81) {cout << "1" << endl; temp = board; transform(); return;}
+		//if(c == 81) {cout << "1" << endl; temp = board; transform(); }
 	}
 
 	int Sudoku::check(int p){
@@ -289,10 +233,11 @@ using namespace std;
 					
 						if(flag == 0){cout << "0" << endl; break;}
 						if(flag == 1){
-
+							
+							board = temp;
 							cout << "1" << endl;
 							for(i = 1 ; i < 82 ; i++)
-							  i%9 == 0 ? cout << temp[i] << endl : cout << temp[i] << " ";
+							  i%9 == 0 ? cout << board[i] << endl : cout << board[i] << " ";
 							goto end;
 						}
 					}
@@ -357,9 +302,10 @@ using namespace std;
 
 						if(flag == 1){
 
+							board = temp;
 							cout << "1" << endl;
 							for(i = 1 ; i < 82 ; i++)
-							  i%9 == 0 ? cout << temp[i] << endl : cout << temp[i] << " ";
+							  i%9 == 0 ? cout << board[i] << endl : cout << board[i] << " ";
 							goto end;
 						}
 					  }
@@ -383,9 +329,10 @@ using namespace std;
 
 							if(flag == 1){
 
+								board = temp;
 								cout << "1" << endl;
 								for(i = 1 ; i < 82 ; i++)
-								  i%9 == 0 ? cout << temp[i] << endl : cout << temp[i] << " ";
+								  i%9 == 0 ? cout << board[i] << endl : cout << board[i] << " ";
 								goto end;
 							}
 						}
